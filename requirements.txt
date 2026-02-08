@@ -1,0 +1,23 @@
+# Data Processing & Analysis
+pandas
+numpy
+matplotlib
+seaborn
+
+# Scraping & Web Requests
+requests
+beautifulsoup4
+lxml
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Jupyter Environment
+jupyter
+ipykernel
+
+# Utils & Configuration
+python-dotenv
+pytz
+colorlog

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: de_postgres
+    environment:
+      POSTGRES_DB: de_test_danone
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: One123123ls
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scraper_network
+
+  scraper:
+    build: .
+    container_name: de_scraper
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+      - ./app:/app/app
+    networks:
+      - scraper_network
+    command: python app/main.py
+
+  jupyter:
+    build: .
+    container_name: de_jupyter
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./logs:/app/logs
+      - ./app:/app/app
+    networks:
+      - scraper_network
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+
+volumes:
+  postgres_data:
+
+networks:
+  scraper_network:
+    driver: bridge
