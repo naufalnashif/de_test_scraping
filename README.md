@@ -268,11 +268,11 @@ Edit `.env` file to customize:
 
 ```env
 # Database
-DB_HOST=localhost          # Use 'db' in Docker
-DB_PORT=5432
-DB_NAME=de_test_danone
+DB_HOST=dummy          # Use 'db' in Docker
+DB_PORT=dummy
+DB_NAME=dummy
 DB_USER=postgres
-DB_PASSWORD=One123123ls
+DB_PASSWORD=postgres
 
 # Scraping
 BASE_URL=https://webscraper.io/test-sites/e-commerce/static
